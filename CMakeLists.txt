@@ -5,14 +5,14 @@ INCLUDE(GenerateExportHeader)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/")
 
-SET(INSTALL_BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin" 
-    CACHE PATH "Installation directory for executables")
-SET(INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib" 
-    CACHE PATH "Installation directory for libraries")
-SET(INSTALL_INC_DIR "${CMAKE_INSTALL_PREFIX}/include" 
-    CACHE PATH "Installation directory for headers")
-SET(WDK_ROOT "C:/WinDDK/7600.16385.1"
-    CACHE PATH "Default WDK path")
+#Installation directory for executables
+SET(INSTALL_BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin")
+#Installation directory for libraries
+SET(INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib")
+#Installation directory for headers
+SET(INSTALL_INC_DIR "${CMAKE_INSTALL_PREFIX}/include")
+
+SET(WDK_ROOT "C:/WinDDK/7600.16385.1" CACHE PATH "Default WDK path")
 
 FIND_PACKAGE(WDK REQUIRED)
 
