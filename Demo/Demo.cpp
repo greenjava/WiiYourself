@@ -8,7 +8,7 @@
 //
 //  demo.cpp  (tab = 4 spaces)
 #include "Demo.h"
-#include "..\wiimote.h"
+#include <wiimote.h>
 #include <mmsystem.h>	// for timeGetTime
 
 // configs:
@@ -24,7 +24,7 @@ void on_state_change (wiimote			  &remote,
 	{
 	// we use this callback to set report types etc. to respond to key events
 	//  (like the wiimote connecting or extensions (dis)connecting).
-	
+
 	// NOTE: don't access the public state from the 'remote' object here, as it will
 	//		  be out-of-date (it's only updated via RefreshState() calls, and these
 	//		  are reserved for the main application so it can be sure the values
@@ -39,7 +39,7 @@ void on_state_change (wiimote			  &remote,
 
 		// note1: you don't need to set a report type for Balance Boards - the
 		//		   library does it automatically.
-		
+
 		// note2: for wiimotes, the report mode that includes the extension data
 		//		   unfortunately only reports the 'BASIC' IR info (ie. no dot sizes),
 		//		   so let's choose the best mode based on the extension status:
@@ -103,7 +103,7 @@ void on_state_change (wiimote			  &remote,
 void PrintTitle (HANDLE console)
 	{
 	BRIGHT_WHITE;
-	_tprintf(_T("\n")); 
+	_tprintf(_T("\n"));
 	_tprintf(_T("   -WiiYourself!- "));
 	WHITE; _tprintf(		   _T("library Demo:   "));
 	CYAN;  _tprintf(						   _T("| (c) "));
@@ -135,7 +135,7 @@ int _tmain ()
 		Sleep(3000);
 		_tprintf(_T("\r") BLANK_LINE);
 		}
-	// and one (more convenient) .wav 
+	// and one (more convenient) .wav
 	if(!wiimote::Load16bitMonoSampleWAV(_T("Daisy16 (3130).wav"), daisy_sample)) {
 		_tprintf(_T("\r  ** can't find 'Daisy16 (3130).wav' - (sample won't work!) **"));
 		Beep(100, 1000);
@@ -145,7 +145,7 @@ int _tmain ()
 
 	// create a wiimote object
 	wiimote remote;
-	
+
 	// in this demo we use a state-change callback to get notified of
 	//  extension-related events, and polling for everything else
 	// (note you don't have to use both, use whatever suits your app):
@@ -162,7 +162,7 @@ reconnect:
 	// try to connect the first available wiimote in the system
 	//  (available means 'installed, and currently Bluetooth-connected'):
 	WHITE; _tprintf(_T("  Looking for a Wiimote     "));
-	   
+
 	static const TCHAR* wait_str[] = { _T(".  "), _T(".. "), _T("...") };
 	unsigned count = 0;
 	while(!remote.Connect(wiimote::FIRST_AVAILABLE)) {
@@ -198,7 +198,7 @@ reconnect:
 		if(!next->Connect(wiimote::FIRST_AVAILABLE))
 			break;
 		extra_motes[detected++] = next;
-		
+
 		WHITE		; _tprintf(_T("   also found wiimote "));
 		BRIGHT_GREEN; _tprintf(_T("%u"), detected+1);
 		if(next->IsBalanceBoard()) {
@@ -219,7 +219,7 @@ reconnect:
 	// clean up
 	for(unsigned index=0; index<detected; index++)
 		delete extra_motes[index];
-	
+
 	SetConsoleCursorPosition(console, cursor_pos);
 #endif // LOOK_FOR_ADDITIONAL_WIIMOTES
 
@@ -231,8 +231,8 @@ reconnect:
 	DWORD	 last_rumble_time = timeGetTime(); // for rumble text animation
 	DWORD    last_led_time    = timeGetTime(); // for led         animation
 	bool	 rumble_text	  = true;
-	unsigned lit_led          = 0;	
-	
+	unsigned lit_led          = 0;
+
 	// display the wiimote state data until 'Home' is pressed:
 	while(!remote.Button.Home())// && !GetAsyncKeyState(VK_ESCAPE))
 		{
@@ -265,7 +265,7 @@ reconnect:
 		// TEMP: Minus button disables MotionPlus (if connected) to allow its
 		//        own extension port to work
 		static bool last_minus = false;
-		if(remote.Button.Minus() && !last_minus && 
+		if(remote.Button.Minus() && !last_minus &&
 		   (remote.ExtensionType == wiimote_state::MOTION_PLUS))
 			remote.DisableMotionPlus();
 		last_minus = remote.Button.Minus();
@@ -283,10 +283,10 @@ reconnect:
 				released_action;											\
 			/* remember the current button state for next time */			\
 			last_##button = pressed; }
-			
+
 		//  play audio whilst certain buttons are held
 		if(!remote.IsBalanceBoard()) {
-			ON_PRESS_RELEASE(  A, remote.PlaySquareWave(FREQ_3130HZ, 0x20), 
+			ON_PRESS_RELEASE(  A, remote.PlaySquareWave(FREQ_3130HZ, 0x20),
 								  remote.EnableSpeaker (false));
 			ON_PRESS_RELEASE(One, remote.PlaySample	   (sine_sample),
 								  remote.EnableSpeaker (false));
@@ -339,7 +339,7 @@ reconnect:
 		// Output method:
 	    CYAN; _tprintf( _T("        using %s\n"), (remote.IsUsingHIDwrites()?
 											   _T("HID writes") : _T("WriteFile()")));
-		
+
 		// 'Unique' IDs (not guaranteed to be unique, check the variable
 		//  defintion for details)
 		CYAN  ; _tprintf(_T("       ID: "));
@@ -381,17 +381,17 @@ reconnect:
 					remote.Acceleration.X,
 					remote.Acceleration.Y,
 					remote.Acceleration.Z);
-	
+
 		// Orientation estimate (shown red if last valid update is aging):
 		CYAN ; _tprintf(_T("   Orient:"));
 		remote.IsBalanceBoard()? RED : WHITE;
 		_tprintf(_T("  UpdateAge %3u  "), remote.Acceleration.Orientation.UpdateAge);
-		
+
 		//  show if the last orientation update is considered out-of-date
 		//   (using an arbitrary threshold)
 		if(remote.Acceleration.Orientation.UpdateAge > 10)
 			RED;
-			
+
 		_tprintf(_T("Pitch:%4ddeg  Roll:%4ddeg  \n")
 			     _T("                           (X %+.3f  Y %+.3f  Z %+.3f)      \n"),
 				 (int)remote.Acceleration.Orientation.Pitch,
@@ -399,7 +399,7 @@ reconnect:
 				 remote.Acceleration.Orientation.X,
 				 remote.Acceleration.Orientation.Y,
   				 remote.Acceleration.Orientation.Z);
-				
+
 		// IR:
 		CYAN ; _tprintf(_T("       IR:"));
 		remote.IsBalanceBoard()? RED : WHITE;
@@ -414,7 +414,7 @@ reconnect:
 		for(unsigned index=0; index<4; index++)
 			{
 			wiimote_state::ir::dot &dot = remote.IR.Dot[index];
-			
+
 			if(!remote.IsBalanceBoard()) WHITE;
 			_tprintf(_T("%u: "), index);
 
@@ -434,7 +434,7 @@ reconnect:
 				}
 
 			_tprintf(_T("  X %.3f  Y %.3f\n"), dot.X, dot.Y);
-			
+
 			if(index < 3)
 				_tprintf(_T("                        "));
 			}
@@ -453,7 +453,7 @@ reconnect:
 		_tprintf(_T("Frequency %4u Hz   Volume 0x%02x\n"),
 				 wiimote::FreqLookup[remote.Speaker.Freq],
 				 remote.Speaker.Volume);
-		
+
 		// -- Extensions --:
 		CYAN ; _tprintf(_T("__________\n  Extnsn.:  "));
 		switch(remote.ExtensionType)
@@ -465,7 +465,7 @@ reconnect:
 				_tprintf(BLANK_LINE BLANK_LINE BLANK_LINE);
 				}
 				break;
-			
+
 			case wiimote_state::PARTIALLY_INSERTED:
 				{
 				BRIGHT_RED;
@@ -473,7 +473,7 @@ reconnect:
 				_tprintf(BLANK_LINE BLANK_LINE BLANK_LINE);
 				}
 				break;
-			
+
 			// -- Nunchuk --
 			case wiimote_state::NUNCHUK:
 				{
@@ -496,7 +496,7 @@ reconnect:
 									   remote.Nunchuk.Acceleration.X,
 									   remote.Nunchuk.Acceleration.Y,
 									   remote.Nunchuk.Acceleration.Z);
-				
+
 				// Orientation estimate (shown red if last valid update is aging):
 				CYAN		; _tprintf(_T("   Orient:"));
 				WHITE		; _tprintf(_T("  UpdateAge %3u  "),
@@ -528,7 +528,7 @@ reconnect:
 					_tprintf(_T("GH3/GHWT Guitar      "));
 				else
 					_tprintf(_T("GHWT Drums           "));
-				
+
 				// L: Joystick/Trigger
 				WHITE; _tprintf(_T("L:  "));
 				CYAN ; _tprintf(_T("Joy "));
